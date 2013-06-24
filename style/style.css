@@ -1,0 +1,387 @@
+/* ==================================
+ * X3DOM WebApp
+ * ==================================
+ * 
+ * Entwickler: Steven Birr (steven.birr@ovgu.de)
+ * 
+ * Datei: style.css
+ * 
+ * CSS Style-Angaben
+ */
+ 
+ /* ================= Globale Angaben ==================== */
+body
+{
+    margin: 0;
+    padding: 0;
+    font: 12px verdana,arial,sans-serif;
+    color: #3B3D3F;
+}
+ul{list-style-type: square}
+li{margin-bottom: 5px}
+strong{font-weight:bold}
+label{padding-left: 5px;cursor:pointer;}
+
+input{margin-bottom: 5px;}
+#IEoptions, #notIE, #webglAlert,#myCanvas,#noCaseAlert{display: none;}
+#jsError{color:red; font-size:14px; margin-left:20px;}
+#jsError span{color: #3B3D3F;}
+#webglAlert{margin: 15px 15px}
+#plus{font-size: 25px; float: left; padding-left:5px; line-height: 1}
+.error{color: #D83C3C}
+
+/* ================= Design ==================== */
+#headlineLink
+{
+   display: block;
+   width: 600px;
+   background-color: #FFFFFF;
+   font-size: 23px;
+   position: relative;
+   text-align: center;
+   padding: 20px;
+   border: 2px solid #D3D3D3;
+   -moz-border-radius: 5px;
+   -webkit-border-radius: 5px;
+   border-radius: 5px;
+   text-shadow: 0 1px 4px #919191;
+   margin: 20px auto 30px;
+}
+
+a:link {color: #0047A3;}
+a:visited{color: #0047A3;}
+a:active{text-decoration: none;}
+a:hover{text-decoration: none; color: #0047A3;}
+a:focus {outline: none;}
+
+a#headlineLink:link {text-decoration: none; color: #0047A3;}
+a#headlineLink:visited{text-decoration: none; color: #0047A3;}
+a#headlineLink:active{text-decoration: none;}
+a#headlineLink:hover{text-decoration: none; color: #3B3D3F}
+a#headlineLink:focus {outline: none;}
+
+/* ================= Case Data ==================== */
+#caseInfo{border: 1px solid #839BAF; width: 820px; margin-left: 10px; margin-top: 10px; padding:10px}
+#textareaHint{font-size: 12px; margin: 20px 0 10px 10px;}
+
+#intro{
+    width: 860px;
+    padding: 30px;
+    font-size: 14px;
+    margin: 10px auto 0;
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ffffff 0%, #eeeeee 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#eeeeee 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ffffff 0%,#eeeeee 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+    -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px;
+    box-shadow: 0 0 3px #888;-moz-box-shadow: 0 0 3px #888; -webkit-box-shadow: 0 0 3px #888;
+}
+
+#intro p{line-height: 1.6}
+
+#mainPanel
+{
+   border-top: 1px solid #EDEDED;
+   line-height: 1.7em;
+   background: rgb(254,255,255); /* Old browsers */
+   background: -moz-linear-gradient(top, rgba(254,255,255,1) 0%, rgba(255,255,255,1) 22%, rgba(215,231,237,1) 53%, rgba(160,216,239,1) 100%); /* FF3.6+ */
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(254,255,255,1)), color-stop(22%,rgba(255,255,255,1)), color-stop(53%,rgba(215,231,237,1)), color-stop(100%,rgba(160,216,239,1))); /* Chrome,Safari4+ */
+   background: -webkit-linear-gradient(top, rgba(254,255,255,1) 0%,rgba(255,255,255,1) 22%,rgba(215,231,237,1) 53%,rgba(160,216,239,1) 100%); /* Chrome10+,Safari5.1+ */
+   background: -o-linear-gradient(top, rgba(254,255,255,1) 0%,rgba(255,255,255,1) 22%,rgba(215,231,237,1) 53%,rgba(160,216,239,1) 100%); /* Opera11.10+ */
+   background: -ms-linear-gradient(top, rgba(254,255,255,1) 0%,rgba(255,255,255,1) 22%,rgba(215,231,237,1) 53%,rgba(160,216,239,1) 100%); /* IE10+ */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#a0d8ef',GradientType=0 ); /* IE6-9 */
+   background: linear-gradient(top, rgba(254,255,255,1) 0%,rgba(255,255,255,1) 22%,rgba(215,231,237,1) 53%,rgba(160,216,239,1) 100%); /* W3C */
+   width: 920px;
+   height: 600px;
+   margin: 30px auto 30px;
+   background-color: #E2EAF3;
+   -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px;
+   box-shadow: 2px 5px 5px #888;-moz-box-shadow: 2px 5px 5px #888; -webkit-box-shadow: 2px 5px 5px #888;
+   padding: 30px 20px;
+}
+
+/* ================= CSS 3 Buttons==================== */
+.button {
+   color:#FFFFFF;
+   -moz-border-radius:9px;
+   -webkit-border-radius:9px;
+   border-radius:9px;
+   display:inline-block;
+   font-family:arial;
+   font-size:13px;
+   font-weight:bold;
+   padding: 10px 20px;
+   text-decoration:none;
+   text-align: center;
+}.button:active {
+   position:relative;
+   top:1px;
+   left: 1px;
+}.button:link{color:#FFFFFF}
+
+#saveLoadControls{margin-top: 50px; margin-left: 70px;}
+
+#saveButton{
+   color:#FFFFFF;
+   -moz-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+   -webkit-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+   box-shadow:inset 0px 1px 0px 0px #c1ed9c;
+   background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9dce2c), color-stop(1, #8cb82b) );
+   background:-moz-linear-gradient( center top, #9dce2c 5%, #8cb82b 100% );
+   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9dce2c', endColorstr='#8cb82b');
+   background-color:#9dce2c;
+   text-shadow:1px 1px 0px #689324;
+   width: 100px;
+ 
+}#saveButton:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8cb82b), color-stop(1, #9dce2c) );
+    background:-moz-linear-gradient( center top, #8cb82b 5%, #9dce2c 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb82b', endColorstr='#9dce2c');
+    background-color:#8cb82b;
+}
+
+#saveResultInfo{display: none; color: #5E930E; padding: 10px; margin-top: 30px; width: 180px; background-color: #FFFFFF; position: relative; left: -30px;}
+#info{clear:left}
+#interactionHelp{padding-top: 10px}
+
+#structureControls
+{
+    overflow: scroll;
+    height: 410px;
+    border: 1px solid #D3D3D3;
+    background-color: #FFFFFF;
+    margin-left: 19px;
+}
+
+.interactHelpIcon{float:left; position: relative; top: -5px;}
+.interactionHelpText{padding-left: 5px;line-height: 18px;font-size: 14px;}
+.keyIcon{width: 33px}
+
+.box{
+   width: 210px;
+   background-color: #FFFFFF;
+   float:left;
+   padding: 0 10px;
+   border: 1px solid #9595A5;
+   -moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;
+   margin-bottom: 20px;
+   margin-left: 20px;
+}
+
+.controlsHeader{
+   font-weight: bold;
+   padding: 6px; 
+   margin-bottom: 10px; 
+   border-bottom: 1px solid #888;
+   font-size: 15px;
+   background-color: #E3E4EA;
+}
+
+#controlsWrapper
+{
+   display: none;
+   float: left;
+   width: 280px;
+}
+
+#splashWrapper{display: none;}
+#loadingText{line-height: 1.8em; padding: 10px 0}
+#splash{
+   width:250px;
+   text-align: center;
+   font-weight: bold;
+   line-height: 1.7em;
+}
+
+/* ================= X3D ==================== */
+.x3dBackground{
+background: #ffffff; /* Old browsers */
+background: -moz-linear-gradient(top,  #ffffff 0%, #919191 50%, #212121 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#919191), color-stop(100%,#212121)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #ffffff 0%,#919191 50%,#212121 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #ffffff 0%,#919191 50%,#212121 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #ffffff 0%,#919191 50%,#212121 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #ffffff 0%,#919191 50%,#212121 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#212121',GradientType=0 ); /* IE6-9 */
+}
+
+#main, #helper{border: 0px solid black;}
+#main{width: 100%; height: 600px;}
+#helper{width:100px; height:100px}
+
+#mainScene{
+   cursor: pointer;
+   margin-left: 10px;
+   margin-right: 10px;
+   border: 1px solid #79b7e7;
+   width: 600px;
+   height: 600px;
+   position: relative;
+   float:left;
+}
+
+#helperScene
+{
+    cursor:pointer;
+    display:none;
+    position: relative;
+    right: -490px;
+    top: -210px;
+}
+
+
+/* 3D Widget */ 
+#widget3D{
+   clear:left;
+   position:relative;
+   display: none;
+   margin-left: 5px;
+   width: 125px; /* Damit das Widget den 3D-Helper nicht überdeckt */
+   height: 82px;
+   top:-85px;
+}
+
+#panControls{width: 85px;}
+
+.widgetControl {
+   background: url("../images/widget.png") no-repeat scroll 1000px 1000px;
+   background-position: -80px 0px;
+   position: relative !important;
+}
+
+#zoomControls{
+   width: 28px;
+   height: 72px;
+   background-position: -166px 0px;
+}
+
+.zoomControls{left: 90px;top: -122px;}
+.zoomControlsClicked{top: -121px;}
+
+.pointer{cursor:pointer}
+.horizontalPan{width: 18px; height:30px;}
+.verticalPan{width: 34px; height:20px;}
+.widgetClickedLeft{right:1px;}
+.widgetClickedRight{left:1px}
+.widgetClickedUp{top:-1px;}
+.widgetClickedDown{top:1px;}
+.widgetClickedHome{left:1px;top:1px;}
+
+.zoom-in{width: 18px; height: 23px; background-position: -195px -18px; left: 6px;top: 19px;}
+.zoom-out{width: 18px; height: 23px; background-position: -195px -43px; left: 6px;top: 20px;border: 0px solid black;}
+.zoom-in-highlight{background-position: -214px -18px;}
+.zoom-out-highlight{background-position: -214px -43px;}
+
+.rotate-left{background-position: 0 0;left: 8.5px;top: 24px;}
+.rotate-right { background-position: -59px 0;left: 58.5px;top: -6px;}
+.rotate-up {background-position: -30px -30px;left: 24px;top: -58px;}
+.rotate-down {background-position: 3px -50px;left: 24px;top: -29px;}
+.rotate-home {width: 22px; height: 23px;background-position: -4px -79px;left: 33px;top: -71px;}
+
+.rotate-left-highlight{background-position: -19px 0;}
+.rotate-right-highlight{background-position: -41px 0;}
+.rotate-up-highlight{background-position: -30px -51px;}
+.rotate-down-highlight{background-position: 3px -29px;}
+.rotate-home-highlight{background-position: -29px -79px;}
+
+/* Tab Menu */
+#structuresMenu{list-style-type: none; margin: 10px 0;position: relative; left: -15px; top: 11px;}
+#structuresMenu li{display: inline-block;margin-right: 10px; margin-bottom: 0}
+#structuresMenu a{display: block; padding: 5px 9px; border: 1px solid #839BAF; background-color: #ABBECE; top:-1px; border-bottom:0}
+#structuresMenu a:link{color: #FFFFFF; text-decoration: none;}
+#structuresMenu a:visited{color: #FFFFFF; text-decoration: none;}
+#structuresMenu a:active{color: #FFFFFF; text-decoration: none;}
+#structuresMenu a:hover{color: #FFFFFF; background-color: #839BAF; text-decoration: none;}
+#structuresMenu a.current{color: #617687; background-color: #F9FBFC; border-bottom: 0;}
+
+#x3dObjects{display: none; padding: 10px}
+#structuresContentWrapper{border: 1px solid #839BAF; border-bottom: 0; border-left: 0; border-right: 0; min-height: 340px; background-color: #F9FBFC;}
+
+/* Annotation Panel */
+#x3dAnnotationObjectPanelWrapper{display: none}
+.x3dAnnotationObjectPanel{width: 180px; border-width: 2px; border-style: solid; margin: 22px auto; padding:5px; background-color: #EFEFEF; }
+
+.objectID{font-size: 13px; font-weight: bold; padding: 3px 8px; margin: 3px 7px; float:left; background-color: #FFFFFF}
+.x3dAnnotationObjectDeleteButton{margin-right: 17px; float:right; padding:3px; font-size:13px; margin-top:1px}
+.x3dAnnotationObjectTextfield{margin-left: 7px; height: 60px; margin-bottom: 7px; padding:10px; margin: 5px 0 7px 7px}
+
+#annotationLinks{margin-left: 20px; margin-bottom: 10px;position: absolute; top:20px;}
+.annotationLink{
+    display: block; position: relative; margin-right: 20px;
+    border-style: solid;    
+    border-width: 1px;
+    border-color: #444444;
+    background-color: #FFFFFF;
+    padding:10px;
+    font-size: 14px;
+    float:left;
+    -moz-border-radius: 7px;-webkit-border-radius: 7px;border-radius: 7px;
+}
+.annotationLink:link{text-decoration: none;}
+.annotationLink:visited{text-decoration: none;}
+.annotationLink:hover{text-decoration: none; background-color: #E8EAF7; transition: background-color 1s}
+.annotationLinkDeActivated{border-width: 1px;background-color: #FFFFFF}
+.annotationLinkActivated{border-width: 2px;background-color: #E8EAF7}
+
+#linkSphere{background-image: url("../images/sphere.png"); background-repeat: no-repeat; background-size: 25px; padding-left: 37px; background-position: 5% 50%}
+#linkArrow{background-image: url("../images/arrow.png"); background-repeat: no-repeat; background-size: 30px; padding-left: 40px; background-position: 5% 50%}
+#linkExplorationMode{}
+
+.number{color: #2B49DB; font-weight: bold}
+.structureCheckboxLabel{padding-left: 5px; font-size:12px; font-weight: normal;}
+.structureCheckboxLabelHover{padding-left: 5px; font-size: 14px; font-weight: bold; padding: 5px; border-style: solid; border-width: 1px;}
+
+#tooltip3D{
+    padding:7px;
+    border-width: 3px;
+    border-style: solid;
+    background-color: #FFFFFF;
+    position: absolute;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.childCb{margin-left:20px}
+.groupCb{margin-top:10px; margin-bottom: 13px}
+.groupCbLabel{font-weight: bold; padding: 4px; background-color: #E8EAF7}
+
+#interactionModes{margin: 10px 0 10px 15px;}
+#interactionModesTooltipWrapper{float:left;}
+#interactionModesMouseOverWrapper{float:left; margin-left:10px}
+
+/* ================= HTML 5 Progressbar ==================== */
+#progressBar
+{
+    color:#0063a6;
+    font-size:.6em;
+    line-height:1.5em;
+    text-indent:.5em;
+    width:15em;
+    height:1.8em;
+    border:1px solid #0063a6;
+    background:#fff;
+    margin-right: 5px;
+}
+#progressBar::-webkit-progress-bar { background:#fff;}		
+#progressBar::-webkit-progress-value, #progressBar::-moz-progress-bar { background:#0063a6;}
+
+/* ================= 2D CSS Tooltip ==================== */
+.tooltip2D span {
+    background-color: #FFFFFF;
+    margin-left: -999em;
+    position: absolute;
+    color: #234E78;
+    padding: 3px 6px;
+    border: 1px solid #0063a6;
+    width: 45px;
+}
+.tooltip2D:hover span{
+    position: absolute; left: 25px; top: 25px; margin-left: 0;z-index: 100;
+}
+
+#Select_Viewpoint{margin-left:5px}
+#viewpointLabel{margin-left: 15px}
