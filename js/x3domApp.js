@@ -1615,6 +1615,7 @@ function X3DOMApp()
             center.translation.x = self.isect.x;
             center.translation.y = self.isect.y;
             center.translation.z = self.isect.z;
+			x3domCollaborationApp.callOnRemote("x3domApp", "addObject", [self.lastAnnotationType, center, false]);
             self.addObject(self.lastAnnotationType, center, false);
             self.setMode("exploration"); // Explorationsmodus wieder aktivieren
         }

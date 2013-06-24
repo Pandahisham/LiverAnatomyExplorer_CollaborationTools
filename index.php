@@ -24,6 +24,7 @@ include_once 'x3dParser.php';
       <link rel="stylesheet" href="js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen">
       <link rel="stylesheet" href="js/x3dom/1.5-dev/x3dom.css" type="text/css" media="screen">
       <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	  <script type="text/javascript" src="js/socket.io.js"></script>
       <script type="text/javascript" src="js/x3dom/1.5-dev/x3dom.js"></script>
       <script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
       <script type="text/javascript" src="js/jquery.repeatedclick.min.js"></script>
