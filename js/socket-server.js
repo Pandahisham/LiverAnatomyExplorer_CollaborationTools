@@ -1,4 +1,4 @@
-// node.js server script of serving the websocket
+// node.js server script for serving the websocket
 
 var io = require('socket.io').listen(3000)
 var allOpenSockets = new Array()

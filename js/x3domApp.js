@@ -332,22 +332,51 @@ function X3DOMApp()
           $("#" + value).repeatedclick(function () {
              switch(value)
              {
-                case "rotate-left":self.updateWidgetClickedState("panControls","widgetClickedLeft");self.rotateY(-45);break;
-                case "rotate-right":self.updateWidgetClickedState("panControls","widgetClickedRight");self.rotateY(45);break;
-                case "rotate-up":self.updateWidgetClickedState("panControls","widgetClickedUp");self.rotateX(-45);break;
-                case "rotate-down":self.updateWidgetClickedState("panControls","widgetClickedDown");self.rotateX(45);break;
-                case "rotate-home":self.updateWidgetClickedState("panControls","widgetClickedHome");break;
-                case "zoom-in":self.updateWidgetClickedState("zoomControls","zoomControlsClicked");self.zoom(1);break;
-                case "zoom-out":self.updateWidgetClickedState("zoomControls","zoomControlsClicked");self.zoom(-1);break;
+                case "rotate-left":
+					self.updateWidgetClickedState("panControls","widgetClickedLeft");
+					self.rotateY(-45);
+					x3domCollaborationApp.callOnRemote("x3domApp", "rotateY", [-45]);
+					break;
+                case "rotate-right":
+					self.updateWidgetClickedState("panControls","widgetClickedRight");
+					self.rotateY(45);
+					x3domCollaborationApp.callOnRemote("x3domApp", "rotateY", [45]);
+					break;
+                case "rotate-up":
+					self.updateWidgetClickedState("panControls","widgetClickedUp");
+					self.rotateX(-45);
+					x3domCollaborationApp.callOnRemote("x3domApp", "rotateX", [-45]);
+					break;
+                case "rotate-down":
+					self.updateWidgetClickedState("panControls","widgetClickedDown");
+					self.rotateX(45);
+					x3domCollaborationApp.callOnRemote("x3domApp", "rotateX", [45]);
+					break;
+                case "rotate-home":
+					self.updateWidgetClickedState("panControls","widgetClickedHome");
+					break;
+                case "zoom-in":
+					self.updateWidgetClickedState("zoomControls","zoomControlsClicked");
+					self.zoom(1);
+					x3domCollaborationApp.callOnRemote("x3domApp", "zoom", [1]);
+					break;
+                case "zoom-out":
+					self.updateWidgetClickedState("zoomControls","zoomControlsClicked");
+					self.zoom(-1);
+					x3domCollaborationApp.callOnRemote("x3domApp", "zoom", [-1]);
+					break;
              }
           });
        });
 
        // ClickHandler für das Zurücksetzen der Szene
        $("#rotate-home").click(function(){
+		  x3domCollaborationApp.callOnRemote("x3domApp", "resetViewpoint", ["main"]);
           self.resetViewpoint("main");
-          if (self.show3DOrientationHelper)
+          if (self.show3DOrientationHelper) {
+			x3domCollaborationApp.callOnRemote("x3domApp", "resetViewpoint", ["helper"]);
             self.resetViewpoint("helper");
+		  }
        });
     }
     
@@ -614,12 +643,18 @@ function X3DOMApp()
        srcCanvasParent.doc.needRender = true; // Rendering update
     }
     
+	this.setOrientationViewpoint = function(direction)
+    {
+		x3domCollaborationApp.callOnRemote("x3domApp", "setOrientationViewpointInner", [direction]);
+		this.setOrientationViewpointInner(direction);
+	}
+	
     /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Rotation der 3D-Szene zu einer mediz. Standardsichtrichtung
      * @param direction: "Axial" | "Sagittal" | "Coronal"
      */
-    this.setOrientationViewpoint = function(direction)
-    {
+    this.setOrientationViewpointInner = function(direction)
+    {	
        switch(direction)
        {
            case "Axial": 
@@ -645,87 +680,119 @@ function X3DOMApp()
      */
     this.setX3DOM_mouseDragEvents = function(srcCanvas)
     {
-       var srcCanvasParent = document.getElementById("x3dom-" + srcCanvas + "-canvas").parent;
-       var va = srcCanvasParent.doc._viewarea;
-       var mat_temp;
-               
-       va.onDrag = function (x, y, buttonState)
-       {
-        self.hide3DTooltip();
-        var navi = va._scene.getNavigationInfo();
-        if (navi._vf.type[0].length <= 1 || navi._vf.type[0].toLowerCase() === "none") {
-            return;
-        }
-        var mouseForce = 0.6; // amount of effect the mouse dragging has on Camera movement.
-        var dx = (x - (va._lastX)) * mouseForce;
-        var dy = (y - (va._lastY)) * mouseForce;
+       var va = self.getVa(srcCanvas)
 
-        var min, max, ok, d, vec;
-        var viewpoint = va._scene.getViewpoint();
+	   va.onDrag = function(x, y, buttonState) {
+//		   x3domCollaborationApp.callOnRemote("x3domApp", "onDragInner", [x, y, buttonState, srcCanvas]);
+//		   self.onDragInner(x, y, buttonState, srcCanvas, va)
+			self.hide3DTooltip();
+			var navi = va._scene.getNavigationInfo();
+			if (navi._vf.type[0].length <= 1 || navi._vf.type[0].toLowerCase() === "none") {
+				return;
+			}
+			var mouseForce = 0.6; // amount of effect the mouse dragging has on Camera movement.
+			var dx = (x - (va._lastX)) * mouseForce;
+			var dy = (y - (va._lastY)) * mouseForce;
 
-        if (navi._vf.type[0].toLowerCase() === "examine")
-        {
-            if (buttonState & 1) // left mouse button ==> rotate scene
-            {
-                var alpha = (dy * 2 * Math.PI) / va._width;
-                var beta = (dx * 2 * Math.PI) / va._height;
-                mat_temp = va.getViewMatrix();
+			var min, max, ok, d, vec;
+			var viewpoint = va._scene.getViewpoint();
 
-                var mx = x3dom.fields.SFMatrix4f.rotationX(alpha);
-                var my = x3dom.fields.SFMatrix4f.rotationY(beta);
+			if (navi._vf.type[0].toLowerCase() === "examine")
+			{
+				if (buttonState & 1) // left mouse button ==> rotate scene
+				{
+					x3domCollaborationApp.callOnRemote("x3domApp", "rotateScene", [dx, dy, srcCanvas]);
+					self.rotateScene(dx, dy, srcCanvas, va)
+				}
 
-                var center = viewpoint.getCenterOfRotation();
-                mat_temp.setTranslate(new x3dom.fields.SFVec3f(0,0,0));
+				if (buttonState & 4) //middle mouse button ==> translate scene
+				{
+				   if (srcCanvas == "helper") return; // disable middle mouse button for orientation helper
+					min = x3dom.fields.SFVec3f.MAX();
+					max = x3dom.fields.SFVec3f.MIN();
+					ok = va._scene.getVolume(min, max, true);
 
-                va._rotMat = va._rotMat.
-                    mult(x3dom.fields.SFMatrix4f.translation(center)).
-                    mult(mat_temp.inverse()).
-                    mult(mx).mult(my).
-                    mult(mat_temp).
-                    mult(x3dom.fields.SFMatrix4f.translation(center.negate()));
-            }
+					d = ok ? (max.subtract(min)).length() : 10;
+					d = (d < x3dom.fields.Eps) ? 1 : d;
 
-            if (buttonState & 4) //middle mouse button ==> translate scene
-            {
-               if (srcCanvas == "helper") return; // disable middle mouse button for orientation helper
-                min = x3dom.fields.SFVec3f.MAX();
-                max = x3dom.fields.SFVec3f.MIN();
-                ok = va._scene.getVolume(min, max, true);
+					vec = new x3dom.fields.SFVec3f(d*dx/va._width,d*(-dy)/va._height,0);
+					va._movement = va._movement.add(vec)
+					var matrix = viewpoint.getViewMatrix().inverse().
+						mult(x3dom.fields.SFMatrix4f.translation(va._movement)).
+						mult(viewpoint.getViewMatrix())
+					x3domCollaborationApp.callOnRemote("x3domApp", "translateScene", [matrix, srcCanvas]);
+					self.translateScene(matrix, srcCanvas, va)
+				}
+				if (buttonState & 2) //right mouse button ==> zoom scene
+				{
+				   if (srcCanvas == "helper") return;  // disable right mouse button for orientation helper
+					min = x3dom.fields.SFVec3f.MAX();
+					max = x3dom.fields.SFVec3f.MIN();
+					ok = va._scene.getVolume(min, max, true);
 
-                d = ok ? (max.subtract(min)).length() : 10;
-                d = (d < x3dom.fields.Eps) ? 1 : d;
-                
-                vec = new x3dom.fields.SFVec3f(d*dx/va._width,d*(-dy)/va._height,0);
-                va._movement = va._movement.add(vec);
-                va._transMat = viewpoint.getViewMatrix().inverse().
-                    mult(x3dom.fields.SFMatrix4f.translation(va._movement)).
-                    mult(viewpoint.getViewMatrix());
+					d = ok ? (max.subtract(min)).length() : 10;
+					d = (d < x3dom.fields.Eps) ? 1 : d;
+					d=d*3.5; // Zoom-Beschleunigungwert
+					vec = new x3dom.fields.SFVec3f(0,0,d*(dx+dy)/va._height);
+					var zoomMatrix = viewpoint.getViewMatrix();
+					zoomMatrix._23 = zoomMatrix._23+vec.z;
+					x3domCollaborationApp.callOnRemote("x3domApp", "zoomScene", [zoomMatrix, srcCanvas]);
+					self.zoomScene(zoomMatrix, srcCanvas, va)
+				}
+			}
+			va._dx = dx;
+			va._dy = dy;
+			va._lastX = x;
+			va._lastY = y;
+		}
+	}
+	
+	this.getVa = function(srcCanvas, va) {
+		// remote calls have to first get va, since it cannot be transfered over the socket completely (too big)
+		return va ? va : document.getElementById("x3dom-" + srcCanvas + "-canvas").parent.doc._viewarea
+	}
 
-            }
-            if (buttonState & 2) //right mouse button ==> zoom scene
-            {
-               if (srcCanvas == "helper") return;  // disable right mouse button for orientation helper
-                min = x3dom.fields.SFVec3f.MAX();
-                max = x3dom.fields.SFVec3f.MIN();
-                ok = va._scene.getVolume(min, max, true);
+	this.rotateScene = function(dx, dy, srcCanvas, va) {
+		va = self.getVa(srcCanvas, va)
+		
+		var viewpoint = va._scene.getViewpoint();
+		var alpha = (dy * 2 * Math.PI) / va._width;
+		var beta = (dx * 2 * Math.PI) / va._height;
 
-                d = ok ? (max.subtract(min)).length() : 10;
-                d = (d < x3dom.fields.Eps) ? 1 : d;
-                d=d*3.5; // Zoom-Beschleunigungwert
-                vec = new x3dom.fields.SFVec3f(0,0,d*(dx+dy)/va._height);
+		var mx = x3dom.fields.SFMatrix4f.rotationX(alpha);
+		var my = x3dom.fields.SFMatrix4f.rotationY(beta);
 
-                mat_temp = viewpoint.getViewMatrix();
-                mat_temp._23=mat_temp._23+vec.z;
-                viewpoint.setView(mat_temp);
-            }
-        }
-        va._dx = dx;
-        va._dy = dy;
-        va._lastX = x;
-        va._lastY = y;
-       }
-    }
+		var center = viewpoint.getCenterOfRotation();
+		var vec = new x3dom.fields.SFVec3f(0,0,0)
+		var translateMatrix = va.getViewMatrix();
+		translateMatrix.setTranslate(vec);
 
+		translateMatrix = va._rotMat.
+			mult(x3dom.fields.SFMatrix4f.translation(center)).
+			mult(translateMatrix.inverse()).
+			mult(mx).mult(my).
+			mult(translateMatrix).
+			mult(x3dom.fields.SFMatrix4f.translation(center.negate()));
+		
+		va._rotMat = translateMatrix
+		self.renderUpdate(srcCanvas)
+	}
+	
+	this.translateScene = function(matrix, srcCanvas, va) {
+		va = self.getVa(srcCanvas, va)
+		va._transMat = matrix
+		self.renderUpdate(srcCanvas)
+	}
+	
+	this.zoomScene = function(matrix, srcCanvas, va) {
+		va = self.getVa(srcCanvas, va)
+		va._scene.getViewpoint().setView(matrix);
+		self.renderUpdate(srcCanvas)
+	}
+	
+	this.renderUpdate = function(srcCanvas) {
+		document.getElementById("x3dom-" + srcCanvas + "-canvas").parent.doc.needRender = true;
+	}
 
     /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Ein Leerzeichen aus dem inputString durch einen Unterstrich ersetzen
@@ -1165,12 +1232,16 @@ function X3DOMApp()
         
         $("#annotations #x3dAnnotationObjectDeleteButton")
         .attr("id", "x3dAnnotationObjectDeleteButton_" + obj)
-        .click(function()
-        {
-            $("#" + obj).remove();
-            $("#annotations #x3dAnnotationObjectPanel_" + obj).slideUp("normal", function() { $(this).remove(); } );
-        });
+        .click(function() {
+			self.x3dAnnotationObjectDeleteButtonFunction(obj)
+			x3domCollaborationApp.callOnRemote("x3domApp", "x3dAnnotationObjectDeleteButtonFunction", [obj]);
+		});
     }
+	
+	this.x3dAnnotationObjectDeleteButtonFunction = function(obj) {
+		$("#" + obj).remove();
+		$("#annotations #x3dAnnotationObjectPanel_" + obj).slideUp("normal", function() { $(this).remove(); } );
+	}
     
     /* ---------------------------------------------------------------------------------------------------------------
      * Laden von Annotationen (JSON-Dateien im Verzeichnis /annotations)
