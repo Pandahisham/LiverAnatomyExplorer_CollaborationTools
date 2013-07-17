@@ -683,8 +683,6 @@ function X3DOMApp()
        var va = self.getVa(srcCanvas)
 
 	   va.onDrag = function(x, y, buttonState) {
-//		   x3domCollaborationApp.callOnRemote("x3domApp", "onDragInner", [x, y, buttonState, srcCanvas]);
-//		   self.onDragInner(x, y, buttonState, srcCanvas, va)
 			self.hide3DTooltip();
 			var navi = va._scene.getNavigationInfo();
 			if (navi._vf.type[0].length <= 1 || navi._vf.type[0].toLowerCase() === "none") {
@@ -740,6 +738,7 @@ function X3DOMApp()
 					self.zoomScene(zoomMatrix, srcCanvas, va)
 				}
 			}
+			x3domCollaborationApp.callOnRemote("x3domApp", "updateCanvas", [srcCanvas, (srcCanvas == "main" ? "helper" : "main")]);
 			va._dx = dx;
 			va._dy = dy;
 			va._lastX = x;
@@ -747,13 +746,12 @@ function X3DOMApp()
 		}
 	}
 	
-	this.getVa = function(srcCanvas, va) {
-		// remote calls have to first get va, since it cannot be transfered over the socket completely (too big)
-		return va ? va : document.getElementById("x3dom-" + srcCanvas + "-canvas").parent.doc._viewarea
+	this.getVa = function(srcCanvas) {
+		return document.getElementById("x3dom-" + srcCanvas + "-canvas").parent.doc._viewarea
 	}
 
-	this.rotateScene = function(dx, dy, srcCanvas, va) {
-		va = self.getVa(srcCanvas, va)
+	this.rotateScene = function(dx, dy, srcCanvas) {
+		va = self.getVa(srcCanvas)
 		
 		var viewpoint = va._scene.getViewpoint();
 		var alpha = (dy * 2 * Math.PI) / va._width;
@@ -778,20 +776,20 @@ function X3DOMApp()
 		self.renderUpdate(srcCanvas)
 	}
 	
-	this.translateScene = function(matrix, srcCanvas, va) {
-		va = self.getVa(srcCanvas, va)
+	this.translateScene = function(matrix, srcCanvas) {
+		va = self.getVa(srcCanvas)
 		va._transMat = matrix
 		self.renderUpdate(srcCanvas)
 	}
 	
-	this.zoomScene = function(matrix, srcCanvas, va) {
-		va = self.getVa(srcCanvas, va)
+	this.zoomScene = function(matrix, srcCanvas) {
+		va = self.getVa(srcCanvas)
 		va._scene.getViewpoint().setView(matrix);
 		self.renderUpdate(srcCanvas)
 	}
 	
 	this.renderUpdate = function(srcCanvas) {
-		document.getElementById("x3dom-" + srcCanvas + "-canvas").parent.doc.needRender = true;
+		document.getElementById("x3dom-"+srcCanvas+"-canvas").parent.doc.needRender = true;
 	}
 
     /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1082,6 +1080,8 @@ function X3DOMApp()
            {
               childCheckboxes = $("#x3dObjects ." + grID);   
               $(this).is(':checked') ? showChildren = true : showChildren = false;
+			  x3domCollaborationApp.callOnRemote("x3domApp", "setCheckboxCheckedStatus", ["#CheckAll_" + grID, showChildren]);
+			  x3domCollaborationApp.callOnRemote("x3domApp", "setCheckboxCheckedStatus", [childCheckboxes, showChildren]);
               $(childCheckboxes).attr("checked", showChildren);
               
               // Zuerst wird die Gruppe auf den neuen Renderstatus gesetzt, danach alle Children
@@ -1098,18 +1098,27 @@ function X3DOMApp()
      */
     this.setDefaultClickHandler = function(x3dObj)
     {
-       var renderState;
-       var structID = self.escapeBlank(x3dObj.id);
-       $("#Check_" + structID).change(function()
-       {
-          $(this).is(':checked') ? renderState = true : renderState = false;
-          self.setX3DObjectRenderState(structID, renderState);
-          /* Wenn der Renderstatus eines Childs true gesetzt wird, muss die ganze Gruppe auch gerendert werden,
-           * damit das Objekt tatsächlich sichtbar wird */
-          if (renderState)
-              self.getX3DObject(x3dObj.groupID).setAttribute("render", renderState);
-       });
+		var renderState;
+		var structID = self.escapeBlank(x3dObj.id);
+		$("#Check_" + structID).change(function()
+		{
+			$(this).is(':checked') ? renderState = true : renderState = false;
+			x3domCollaborationApp.callOnRemote("x3domApp", "setCheckboxCheckedStatus", ["#Check_" + structID, renderState]);
+			x3domCollaborationApp.callOnRemote("x3domApp", "setX3DObjectRenderState", [structID, renderState]);
+			self.getX3DObject(structID).setAttribute("render", renderState);
+			
+			self.setX3DObjectRenderState(structID, renderState);
+			/* Wenn der Renderstatus eines Childs true gesetzt wird, muss die ganze Gruppe auch gerendert werden,
+			 * damit das Objekt tatsächlich sichtbar wird */
+			if (renderState) {
+				self.getX3DObject(x3dObj.groupID).setAttribute("render", renderState);
+			}
+		});
     }
+	
+	this.setCheckboxCheckedStatus = function(id, checked) {
+		$(id).attr("checked", checked);
+	}
     
     /* ---------------------------------------------------------------------------------------------------------------
      * Default-3D-MouseoverHandler
@@ -1228,7 +1237,9 @@ function X3DOMApp()
         
         $("#annotations #x3dAnnotationObjectTextfield")
         .val(text)
-        .attr("id", "x3dAnnotationObjectTextfield_" + obj);
+        .attr("id", "x3dAnnotationObjectTextfield_" + obj)
+		.attr("onkeyup", "x3domApp.x3dAnnotationObjectTextfield_onchange(this)") // for keyboard input
+		.attr("onchange", "x3domApp.x3dAnnotationObjectTextfield_onchange(this)"); // for pasting
         
         $("#annotations #x3dAnnotationObjectDeleteButton")
         .attr("id", "x3dAnnotationObjectDeleteButton_" + obj)
@@ -1237,6 +1248,14 @@ function X3DOMApp()
 			x3domCollaborationApp.callOnRemote("x3domApp", "x3dAnnotationObjectDeleteButtonFunction", [obj]);
 		});
     }
+
+	this.x3dAnnotationObjectTextfield_onchange = function(caller) {
+		x3domCollaborationApp.callOnRemote("x3domApp", "x3dAnnotationObjectTextfield_setTextfieldContent", [caller.id, caller.value]);
+	}
+	
+	this.x3dAnnotationObjectTextfield_setTextfieldContent = function(textfieldID, newContent) {
+		document.getElementById(textfieldID).value = newContent;
+	}
 	
 	this.x3dAnnotationObjectDeleteButtonFunction = function(obj) {
 		$("#" + obj).remove();
@@ -1503,23 +1522,30 @@ function X3DOMApp()
         if (self.drag) 
         {
             var pos = self.runtime.mousePosition(event); // X,Y-Position auf der XY-Ebene
-            var ray = self.runtime.getViewingRay(pos[0], pos[1]); // Line-Objekt, dass die Richtung des Sichtstrahls angibt
             
             var track = null;
 
-            if (self.buttonState === 2) // rechter Mausbutton
+            if (self.buttonState === 2) {
                 track = self.translateZ(self.firstRay, pos[1]);
-            else
-                track = self.translateXY(ray);
+			} else { // rechter Mausbutton
+                track = self.translateXYoutter(pos);
+			}
             
             // Translationswerte aktualisieren
-            if (track)
-                self.currAnnObj.setAttribute("translation", track.x + "," + track.y + "," + track.z);     
+            if (track) {
+				x3domCollaborationApp.callOnRemote("x3domApp", "translationOfAnnotationObject", [self.currAnnObjID, track]);
+				self.translationOfAnnotationObject(self.currAnnObjID, track)
+//                self.currAnnObj.setAttribute("translation", track.x + "," + track.y + "," + track.z);
+			}
 
             self.lastX = pos[0];
             self.lastY = pos[1];
         }
     };
+	
+	this.translationOfAnnotationObject = function(currAnnObjID, track) {
+		document.getElementById(currAnnObjID).setAttribute("translation", track.x + "," + track.y + "," + track.z);  
+	}
 
     /* ------------------------------------------------------------------------
      * Beenden des Verschiebemodus
@@ -1592,6 +1618,11 @@ function X3DOMApp()
             }
         return false;
     }
+	
+	this.translateXYoutter = function(pos) {
+		var ray = self.runtime.getViewingRay(pos[0], pos[1]); // Line-Objekt, dass die Richtung des Sichtstrahls angibt
+		return self.translateXY(ray)
+	}
     
     /* ------------------------------------------------------------------------
      * X3DOM: Translation along plane parallel to viewing plane E:x=p+t*u+s*v
