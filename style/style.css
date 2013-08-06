@@ -385,3 +385,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 
 #Select_Viewpoint{margin-left:5px}
 #viewpointLabel{margin-left: 15px}
+
+#remotes video, #localVideo {
+	height: 200px; /* stable */
+/*	max-height: 100%;
+	max-width: 100%;*/
+	background-color: #555;
+}

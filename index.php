@@ -23,8 +23,11 @@ include_once 'x3dParser.php';
       <link rel="stylesheet" type="text/css" href="style/style.css">
       <link rel="stylesheet" href="js/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen">
       <link rel="stylesheet" href="js/x3dom/1.5-dev/x3dom.css" type="text/css" media="screen">
+      <link rel="stylesheet" href="style/ui-lightness/jquery-ui-1.10.3.custom.min.css" type="text/css">
       <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	  <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
 	  <script type="text/javascript" src="js/socket.io.js"></script>
+	  <script type="text/javascript" src="js/simplewebrtc.bundle.js"></script>
       <script type="text/javascript" src="js/x3dom/1.5-dev/x3dom.js"></script>
       <script type="text/javascript" src="js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
       <script type="text/javascript" src="js/jquery.repeatedclick.min.js"></script>
@@ -32,7 +35,8 @@ include_once 'x3dParser.php';
       <script type="text/javascript" src="js/x3domApp.js"></script>
       <script type="text/javascript" src="js/x3domCollaborationApp.js"></script>
       <script type="text/javascript" src="js/myScript.js"></script>
-      <title>X3D/WebGL AnnotationApp</title>
+	  <script type="text/javascript" src="js/webRTC.js"></script>
+	  <title>X3D/WebGL AnnotationApp</title>
    </head>
    <body>
    <noscript>
@@ -216,5 +220,11 @@ include_once 'x3dParser.php';
         </div>
        </div>
    </div>
+   
+	<div id="localVideoDialog" title="WebRTC-Local">
+		<video id="localVideo"></video>
+	</div>
+	<div id="remotes" title="WebRTC-Remote"></div>
+	
   </body>
 </html>

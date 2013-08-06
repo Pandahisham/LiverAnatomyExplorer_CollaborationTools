@@ -1,6 +1,6 @@
 // node.js server script for serving the websocket
 
-var io = require('socket.io').listen(3000)
+var io = require('socket.io').listen(8080)
 var allOpenSockets = new Array()
 
 io.sockets.on('connection', function (socket) {
@@ -10,7 +10,7 @@ io.sockets.on('connection', function (socket) {
 		allOpenSockets.push(socket)
 	}
 	
-	socket.on('message', function (message) {
+	socket.on('myChannel', function (message) {
 		console.log("Got message from client: " + message)
 		for (var i=0; i<allOpenSockets.length; i++)
 			if (allOpenSockets[i] != socket) // do not send back to self (no echo)
