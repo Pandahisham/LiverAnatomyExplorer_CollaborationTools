@@ -40,7 +40,8 @@ io.sockets.on('connection', function (client) {
 	
 	client.on('myTextChannel', function (message) {
 		for (var i=0; i<allOpenSockets.length; i++)
-			allOpenSockets[i].emit('myText', message)
+			if (allOpenSockets[i] != client) // do not send back to self (no echo)
+				allOpenSockets[i].emit('myText', client.id+" > "+message)
 	})
 	
     client.resources = {

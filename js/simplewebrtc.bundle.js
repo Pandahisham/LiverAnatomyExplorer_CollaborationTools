@@ -36,7 +36,7 @@ function SimpleWebRTC(opts) {
 
        // our socket.io connection
     connection = this.connection = io.connect(this.config.url);
-
+	
     connection.on('connect', function () {
         self.emit('ready', connection.socket.sessionid);
         self.sessionReady = true;
