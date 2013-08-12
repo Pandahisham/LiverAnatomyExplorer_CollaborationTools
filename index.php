@@ -227,7 +227,7 @@ include_once 'x3dParser.php';
 	<div id="remotes" title="WebRTC-Remote"></div>
 	
 	<div id="chat" title="Chat">
-		<input id="chatInput" type="text" size="1" maxlength="30">
+		<input id="chatInput" type="text" size="1" maxlength="1000">
 		<div id="chatMessages"></div>
 	</div>
 	

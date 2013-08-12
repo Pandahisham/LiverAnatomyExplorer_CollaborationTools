@@ -1,21 +1,25 @@
-// TODO moving the dialogs seems to stop the video
-// TODO dialogs are not shown if the page is already scrolled down
+// TODO moving/resizing the dialogs seems to stop the video
 $(document).ready(function() {
+	// TODO dialogs are not shown if the page is already scrolled down
+	window.scrollTo(0, 0)
+	
 	$('#localVideoDialog').dialog({
+		width: "25%",
 		height: 250,
 		dialogClass: "flora",
-		position: { my: "left", at: "left", of: window }
+		position: { my: "left bottom", at: "left bottom", of: window }
 	})
 	$('#remotes').dialog({
+		width: "25%",
 		height: 250,
 		dialogClass: "flora",
-		position: { my: "right", at: "right", of: window }
+		position: { my: "right bottom", at: "right bottom", of: window }
 	})
 	$('#chat').dialog({
-		width: 500,
+		width: "40%",
 		height: 200,
 		dialogClass: "flora",
-		position: { my: "bottom", at: "bottom", of: window }
+		position: { my: "center bottom", at: "center bottom", of: window }
 	})
 	$('.flora.ui-dialog').css({position:"fixed"})
 	

@@ -387,23 +387,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 #viewpointLabel{margin-left: 15px}
 
 #remotes video, #localVideo {
-	height: 200px; /* stable */
-/*	max-height: 100%;
-	max-width: 100%;*/
+	/*height: 200px;  stable */
+	max-height: 100%;
+	max-width: 100%;
 	background-color: #555;
 }
-
-/*#chat {
-	position: fixed;
-	bottom: -10px;
-	width: 40%;
-	margin: 0 5%;
-	max-height: 20%;
-	border-radius: 10px;
-	background-color: rgba(0, 0, 0, 0.2);
-	padding: 10px;
-	box-shadow: inset 0 2px 2px rgba(0,0,0,0.2);
-}*/
 #chatInput {
 	width: 100%;
 }
